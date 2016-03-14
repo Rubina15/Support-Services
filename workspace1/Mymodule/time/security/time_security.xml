@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+
+	<record id="group_admin" model="res.groups">
+        <field name="name">User: Admin</field>
+        <field name="category_id" ref="base.module_category_administration"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">the user has access to everything</field>
+    </record>
+</data>
+</openerp>

@@ -1,0 +1,30 @@
+<openerp>
+    <data>
+        <record model="timetracking.priority" id="1">
+            <field name="name">High</field>
+        </record>
+        <record model="timetracking.priority" id="2">
+            <field name="name">Medium</field>
+        </record>
+        <record model="timetracking.priority" id="3">
+            <field name="name">Low</field>
+        </record>
+        <record model="timetracking.priority" id="4">
+            <field name="name">Normal</field>
+        </record>
+        <record model="timetracking.priority" id="5">
+            <field name="name">Immediate</field>
+        </record>
+        
+        <record model="timetracking.tracker" id="1">
+            <field name="name">Bug</field>
+        </record>
+        <record model="timetracking.tracker" id="2">
+            <field name="name">Support</field>
+        </record>
+        <record model="timetracking.tracker" id="3">
+            <field name="name">Report</field>
+        </record>
+       
+    </data>
+</openerp>

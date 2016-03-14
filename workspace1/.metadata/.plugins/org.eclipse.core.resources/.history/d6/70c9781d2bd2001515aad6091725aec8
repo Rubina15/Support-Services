@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+    <record model="ir.ui.view" id="company_form_view">
+            <field name="name">company.form</field>
+            <field name="model">timetracking.company</field>
+            <field name="arch" type="xml">
+                <form string="Company Form">
+                <header>
+                        <button name="action_draft" type="object"
+                                string="Reset to draft"
+                                states="confirmed,done"/>
+                        <button name="action_confirm" type="object"
+                                string="Confirm" states="draft"
+                                class="oe_highlight"/>
+                        <button name="action_done" type="object"
+                                string="Mark as done" states="confirmed"
+                                class="oe_highlight"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                
+                    <sheet>
+                        <group>
+                           	<field name="name"/>
+				            <field name="initial_hours"/>
+				            <field name="start_date"/>
+				           	<field name="end_date"/>
+				           	<field name="amt_left"/>
+				           	<field name="test"/>
+                        </group>
+                        <notebook>
+                            <page>
+                                
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+         <record model="ir.ui.view" id="company_search_view">
+            <field name="name">company.search</field>
+            <field name="model">timetracking.company</field>
+            <field name="arch" type="xml">
+                <search>
+           			<field name="name"/>
+				    <field name="initial_hours"/>
+				    <field name="start_date"/>
+				    <field name="end_date"/>
+				    <field name="amt_left"/>
+				    <field name="test"/>
+                </search>
+            </field>
+        </record>
+        
+    	 <!-- override the automatically generated list view for courses -->
+        <record model="ir.ui.view" id="company_tree_view">
+            <field name="name">company.tree</field>
+            <field name="model">timetracking.company</field>
+            <field name="arch" type="xml">
+                <tree string="Company Tree">
+                    <field name="name"/>
+                    <field name="initial_hours"/>
+                    <field name="amt_left"/>
+                </tree>
+            </field>
+        </record>
+    	
+        <!-- window action -->
+        <!--
+            The following tag is an action definition for a "window action",
+            that is an action opening a view or a set of views
+        -->
+        <record model="ir.actions.act_window" id="company_list_action">
+            <field name="name">Support Service</field>
+            <field name="res_model">timetracking.company</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                </p>
+            </field>
+        </record>
+
+        <!-- top level menu: no parent -->
+        <menuitem id="main_timetracking_menu" name="Support Tracking"/>
+        <!-- A first level in the left side menu is needed
+             before using action= attribute -->
+        <menuitem id="timetracking_menu" name="Support Tracking"
+                  parent="main_timetracking_menu"/>
+        <!-- the following menuitem should appear *after*
+             its parent timetracking_menu and *after* its
+             action course_list_action -->
+        <menuitem id="company_menu" name="Company" parent="timetracking_menu"
+                  action="company_list_action"/>
+      	
+      
+        <!-- Full id location:
+             action="timetracking.track_list_action"
+             It is not required when it is the same module -->
+       
+       <!-- session form view -->
+        <record model="ir.ui.view" id="session_form_view">
+            <field name="name">session.form</field>
+            <field name="model">timetracking.session</field>
+            <field name="arch" type="xml">
+                <form string="Session Form">
+                    <sheet>
+                        <group>
+                            <field name="customer_id"/>
+                            <field name="initial_hours"/>
+				    		<field name="start_date"/>
+				    		<field name="end_date"/>
+                        </group>
+                         <notebook>
+                            <page string="Support Services">
+                            <field name="usage_ids">
+	                            <tree string ="Add time">
+	                            	<field name="in_date"/>
+	                                <field name="duration"/>
+	                             </tree>
+                             </field>  
+                            </page>
+                        </notebook>
+                        <group>
+                            <field name="total"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+		 <!-- session tree/list view -->
+        <record model="ir.ui.view" id="session_tree_view">
+            <field name="name">session.tree</field>
+            <field name="model">timetracking.session</field>
+            <field name="arch" type="xml">
+                <tree string="Session Tree">
+                    <field name="name_id"/>
+                    <field name="total"/>
+                </tree>
+            </field>
+        </record>
+		
+		
+        <record model="ir.actions.act_window" id="session_list_action">
+            <field name="name">Sessions</field>
+            <field name="res_model">timetracking.session</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="session_menu" name="Support Services"
+                  parent="timetracking_menu"
+                  action="session_list_action"/>
+                  
+         <record model="ir.ui.view" id="usage_form_view">
+            <field name="name">usage.form</field>
+            <field name="model">timetracking.usage</field>
+            <field name="arch" type="xml">
+                <form string="Usage Form">
+                    <sheet>
+                        <group>
+                            <field name="in_date"/>
+                            <field name="duration"/>
+                            
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+       
+      <record model="ir.actions.act_window" id="usage_list_action">
+            <field name="name">Usage</field>
+            <field name="res_model">timetracking.usage</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+         <menuitem id="usage_menu" name="Usage" parent="timetracking_menu"
+                  action="usage_list_action"/>
+        
+     
+    </data>
+</openerp>
+

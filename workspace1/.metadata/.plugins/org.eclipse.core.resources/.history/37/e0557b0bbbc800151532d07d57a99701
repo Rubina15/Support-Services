@@ -1,0 +1,57 @@
+# -*- coding: utf-8 -*-
+from openerp import models, fields, api
+
+class Tracking(models.Model):
+    _name = 'timetracking.track'
+
+    name = fields.Char(string="Company Name", required=True)
+    Initial_hours =fields.Integer(required=True)
+    date = fields.Date(string="Start Date",required=True)
+    Date = fields.Date(string= "End Date")
+    Available = fields.Float(required=True)
+    
+    
+    state = fields.Selection([
+        ('draft', "Draft"),
+        ('confirmed', "Confirmed"),
+        ('done', "Done"),
+    ], default='draft')
+
+    @api.multi
+    def action_draft(self):
+        self.state = 'draft'
+
+    @api.multi
+    def action_confirm(self):
+        self.state = 'confirmed'
+
+    @api.multi
+    def action_done(self):
+        self.state = 'done'
+        
+        
+class Session(models.Model):
+    _name = 'timetracking.session'
+
+    name = fields.Many2one('timetracking.track', ondelete= 'cascade',string="Company Name")
+    Total=fields.Float(string ="Total Duration", compute = '_total')
+    Date= fields.One2many('timetracking.course','time_id')
+    
+    #duration= fields.One2many('timetracking.course','duration')
+    
+    @api.depends('duration')
+    def _total(self):
+        for r in self:
+            r.Total = r.duration + r.duration 
+
+   
+    
+    
+class Course(models.Model):
+    _name = 'timetracking.course'
+
+    time_id = fields.Many2one('timetracking.session',string ="Time", required= True)
+    Date= fields.Date(defualt=fields.Date.today)
+    duration= fields.Float()
+   
+

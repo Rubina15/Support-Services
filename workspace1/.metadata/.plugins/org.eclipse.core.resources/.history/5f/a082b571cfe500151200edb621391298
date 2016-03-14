@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+    <record model="ir.ui.view" id="session_form_view">
+            <field name="name">session.form</field>
+            <field name="model">timetracking.session</field>
+            <field name="arch" type="xml">
+                <form string="Session Form">
+                <header>
+                        <button name="action_active" type="object"
+                                string="Reset to active"
+                                states="expired,done"/>
+                        <button name="action_expired" type="object"
+                                string="Mark as Expired" states="active"
+                                class="oe_highlight"/>
+                        
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                
+                    <sheet>
+                        <group>
+                            <field name="customer_id"/>
+                            <field name="initial_hours"/>
+				    		<field name="start_date"/>
+				    		<field name="end_date"/>
+				    		<field name="amt_left"/>
+				    		
+				    		
+                        </group>
+                         <notebook>
+                            <page string="Support Services">
+                            <field name="usage_ids">
+	                            <tree string ="Add time">
+	                            	<field name="issue_id"/>
+	                            	<field name="description"/>
+	                            	<field name="in_date"/>
+	                                <field name="duration"/>
+	                                <field name="priority"/>
+                           			<field name="tracker"/>
+                            		<field name="status"/>
+	                             </tree>
+                             </field>  
+                            </page>
+                        </notebook>
+                        <group>
+                            <field name="total"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+         <record model="ir.ui.view" id="session_search_view">
+         <field name="name">session.search</field>
+            <field name="model">timetracking.session</field>
+            <field name="arch" type="xml">
+            <filter name="group_customer_id" string="Company" icon="terp-partner" context="{'group_by':'customer_id'}"/>
+            
+                <search>
+           			 <field name="customer_id"/>
+                     <field name="initial_hours"/>
+				     <field name="start_date"/>
+				     <field name="end_date"/>
+				     <field name="amt_left"/>
+                </search>
+            </field>
+        </record>
+        
+    	 
+        <record model="ir.ui.view" id="session_tree_view">
+            <field name="name">session.tree</field>
+            <field name="model">timetracking.session</field>
+            <field name="arch" type="xml">
+                <tree string="Session Tree">
+                    <field name="customer_id"/>
+                    <field name="start_date"/>
+				    <field name="end_date"/>
+                    <field name="initial_hours"/>
+                    <field name="amt_left"/>
+                    <field name="state"/>
+                    
+                </tree>
+            </field>
+        </record>
+    	
+    	<record model="ir.ui.view" id="timetracking_session_graph_view">
+            <field name="name">timetracking.session.graph</field>
+            <field name="model">timetracking.session</field>
+            <field name="arch" type="xml">
+                <graph string="Company Hours">
+                    <field name="customer_id"/>
+                   
+                </graph>
+            </field>
+        </record>
+    	
+        <!-- window action -->
+        <!--
+            The following tag is an action definition for a "window action",
+            that is an action opening a view or a set of views
+        -->
+        <record model="ir.actions.act_window" id="session_list_action">
+            <field name="name">Support Service</field>
+            <field name="res_model">timetracking.session</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                </p>
+            </field>
+            <field name="context">{'search_default_group_customer_id': 1}</field>
+        </record>
+
+        <!-- top level menu: no parent -->
+        <menuitem id="main_timetracking_menu" name="Support Tracking"/>
+        <!-- A first level in the left side menu is needed
+             before using action= attribute -->
+        <menuitem id="timetracking_menu" name="Support Tracking"
+                  parent="main_timetracking_menu"/>
+        <!-- the following menuitem should appear *after*
+             its parent timetracking_menu and *after* its
+             action course_list_action -->
+        <menuitem id="session_menu" name="Support Session" parent="timetracking_menu"
+                  action="session_list_action"/>
+      	
+      
+        <!-- Full id location:
+             action="timetracking.track_list_action"
+             It is not required when it is the same module -->
+      
+        <!-- Priority -->
+        
+        <record model="ir.ui.view" id="priority_form_view">
+            <field name="name">priority.form</field>
+            <field name="model">timetracking.priority</field>
+            <field name="arch" type="xml">
+                <form string="Priority Form">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+      
+      	<record model="ir.ui.view" id="priority_tree_view">
+            <field name="name">priority.tree</field>
+            <field name="model">timetracking.priority</field>
+            <field name="arch" type="xml">
+                <tree string="Priority Tree">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+       
+      	<record model="ir.actions.act_window" id="priority_list_action">
+            <field name="name">priority</field>
+            <field name="res_model">timetracking.priority</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem id="priority_menu" name="Priority" parent="timetracking_menu"
+                  action="priority_list_action"/>
+       
+       <!-- Tracker -->
+       
+       <record model="ir.ui.view" id="tracker_form_view">
+            <field name="name">tracker.form</field>
+            <field name="model">timetracking.tracker</field>
+            <field name="arch" type="xml">
+                <form string="Tracker Form">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+      
+      <record model="ir.ui.view" id="tracker_tree_view">
+            <field name="name">tracker.tree</field>
+            <field name="model">timetracking.tracker</field>
+            <field name="arch" type="xml">
+                <tree string="Tracker Tree">
+                    <field name="name"/>
+                   
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="tracker_list_action">
+            <field name="name">tracker</field>
+            <field name="res_model">timetracking.tracker</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+         <menuitem id="tracker_menu" name="Trackers" parent="timetracking_menu"
+                  action="tracker_list_action"/>
+                  
+      
+                  
+		 <!-- Status -->
+       
+        <record model="ir.ui.view" id="status_form_view">
+            <field name="name">status.form</field>
+            <field name="model">timetracking.status</field>
+            <field name="arch" type="xml">
+                <form string="Status Form">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+      
+      <record model="ir.ui.view" id="status_tree_view">
+            <field name="name">status.tree</field>
+            <field name="model">timetracking.status</field>
+            <field name="arch" type="xml">
+                <tree string="Status Tree">
+                    <field name="name"/>
+                   
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="status_list_action">
+            <field name="name">status</field>
+            <field name="res_model">timetracking.status</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+         <menuitem id="status_menu" name="Status" parent="timetracking_menu"
+                  action="status_list_action"/>
+       
+       <!-- Usage -->
+                     
+         <record model="ir.ui.view" id="usage_form_view">
+            <field name="name">usage.form</field>
+            <field name="model">timetracking.usage</field>
+            <field name="arch" type="xml">
+                <form string="Usage Form">
+                    <sheet>
+                        <group>
+                        	<field name="customer_id"/> 
+                            <field name="issue_id"/>
+	                        <field name="description"/>
+	                      	<field name="in_date"/>
+                            <field name="duration"/>
+                            <field name="priority"/>
+                            <field name="tracker"/>
+                            <field name="status"/>
+                            
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="usage_tree_view">
+            <field name="name">usage.tree</field>
+            <field name="model">timetracking.usage</field>
+            <field name="arch" type="xml">
+                <tree string="Usage Tree">
+	              	<field name="customer_id"/> 
+	               	<field name="issue_id"/>
+		           	<field name="description"/>
+		            <field name="in_date"/>
+	                <field name="duration"/>
+	                <field name="priority"/>
+	                <field name="tracker"/>
+	                <field name="status"/>
+                </tree>
+            </field>
+        </record>
+       
+      <record model="ir.actions.act_window" id="usage_list_action">
+            <field name="name">Usage</field>
+            <field name="res_model">timetracking.usage</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+         <menuitem id="usage_menu" name="Usage" parent="timetracking_menu"
+                  action="usage_list_action"/> 
+        
+        
+     
+    </data>
+</openerp>
+

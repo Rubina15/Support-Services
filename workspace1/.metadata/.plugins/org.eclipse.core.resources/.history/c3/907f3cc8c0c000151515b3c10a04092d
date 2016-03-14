@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+       
+        
+
+        <!-- top level menu: no parent -->
+        <menuitem id="main_timetracking_menu" name="Time Tracking"/>
+        <!-- A first level in the left side menu is needed
+             before using action= attribute -->
+        <menuitem id="timetracking_menu" name="Time Tracking"
+                  parent="main_timetracking_menu"/>
+        <!-- the following menuitem should appear *after*
+       
+    </data>
+</openerp>

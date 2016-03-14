@@ -1,0 +1,92 @@
+# -*- coding: utf-8 -*-
+from openerp import models, fields, api
+from mx.DateTime.DateTime import today
+from openerp.exceptions import UserError
+from mx.DateTime.mxDateTime.mxDateTime_Python import DateTime
+
+
+class PackageSession(models.Model):
+    _name = 'timetracking.session'
+
+    customer_id = fields.Many2one('res.partner',
+                                  string='Customer',
+                                  required=True)
+    initial_hours = fields.Float()
+    start_date = fields.Date.today(string="Start Date", required=True)
+                             #default=DateTime.today)
+    
+    end_date = fields.Date(string="End Date")
+
+    total = fields.Float(string="Total Duration", compute='_total')
+    amt_left = fields.Float(string="Amount Left", compute='_total')
+
+    usage_ids = fields.One2many('timetracking.usage', 'time_id')
+
+    duration = fields.One2many('timetracking.usage', 'duration')
+
+    state = fields.Selection([
+        ('active', "Active"),
+        ('expired', "Expired"),
+    ], default='active')
+
+    #if amt_left == 0:
+       # state = 'Expired'
+       # make edit button invisible
+    #elif amt_left < 0:
+      #  raise UserError(_('The amount left have been exceeded to %f Please check it again.') % amt_left)
+    #else:
+       # state = 'active'
+
+    @api.multi
+    def action_active(self):
+        self.state = 'active'
+
+    @api.multi
+    def action_expired(self):
+        self.state = 'expired'
+
+    @api.one
+    @api.depends('duration')
+    def _total(self):
+        total = 0.0
+        available = self.initial_hours
+        print self.duration
+        for r in self.usage_ids:
+            print r
+            print r.duration
+            total += r.duration
+        self.total = total
+        available -= total
+        self.amt_left = available
+
+class Priority(models.Model):
+    _name = 'timetracking.priority'
+
+    name = fields.Text(required=True)
+
+
+class Tracker(models.Model):
+    _name = 'timetracking.tracker'
+
+    name = fields.Text(string='Tracker', required=True)
+
+
+class Status(models.Model):
+    _name = 'timetracking.status'
+
+    name = fields.Text(string='Status', required=True)
+
+
+class Usage(models.Model):
+    _name = 'timetracking.usage'
+
+    time_id = fields.Many2one('timetracking.session',
+                              string="Time",
+                              required=True)
+    issue_id = fields.Char()
+    description = fields.Text()
+    in_date = fields.Date()
+    duration = fields.Float()
+    priority = fields.Many2one('timetracking.priority', 'name')
+    tracker = fields.Many2one('timetracking.tracker', 'name')
+    status = fields.Many2one('timetracking.status', 'name')

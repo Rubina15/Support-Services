@@ -1,0 +1,67 @@
+# -*- coding: utf-8 -*-
+from openerp import models, fields, api
+
+
+class Company(models.Model):
+    _name = 'timetracking.company'
+
+    name = fields.Char(string="Company Name", required=True)
+    initial_hours = fields.Integer(required=True)
+    start_date = fields.Date(string="Start Date", required=True)
+    end_date = fields.Date(string="End Date")
+    amt_left = fields.Float(string="Amount Left")
+
+    usage_ids = fields.One2many('timetracking.session', 'total_id')
+
+    #@api.one
+    # def _total(self):
+      #   available = self.Initial_hours
+        # print self.usage_ids
+         #for r in self.usage_ids:
+         #    print r
+           #  available -= r.total
+       #  self.Available = available
+
+    state = fields.Selection([
+        ('draft', "Draft"),
+        ('confirmed', "Confirmed"),
+        ('done', "Done"),
+    ], default='draft')
+
+    @api.multi
+    def action_draft(self):
+        self.state = 'draft'
+
+    @api.multi
+    def action_confirm(self):
+        self.state = 'confirmed'
+
+    @api.multi
+    def action_done(self):
+        self.state = 'done'
+
+
+class PackageSession(models.Model):
+    _name = 'timetracking.session'
+
+    name = fields.Text()
+    #Many2one('timetracking.company', ondelete='cascade',string="Company Name")
+    total = fields.Float()
+    #(string="Total Duration", compute='_total')
+    total_id = fields.Many2one('timetracking.company',
+                               string="Totals",
+                               required=True)
+    usage_ids = fields.Text()
+    #One2many('timetracking.usage', 'time_id')
+
+    duration = fields.Text()
+    #One2many('timetracking.usage', 'duration')
+
+    
+class Usage(models.Model):
+    _name = 'timetracking.usage'
+
+    time_id = fields.Text()
+    #Many2one('timetracking.session',string="Time",required=True)
+    in_date = fields.Date()
+    duration = fields.Float()

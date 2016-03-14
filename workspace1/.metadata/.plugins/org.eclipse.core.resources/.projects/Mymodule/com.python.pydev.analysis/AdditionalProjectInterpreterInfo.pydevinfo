@@ -1,0 +1,52 @@
+-- VERSION_4
+-- START DISKCACHE_2
+/home/rubins/workspace1/.metadata/.plugins/org.eclipse.core.resources/.projects/Mymodule/com.python.pydev.analysis/v2_indexcache
+time.controllers.__init__|1453354679000000000|/home/rubins/workspace1/Mymodule/time/controllers/__init__.py
+time.__openerp__|1455784460000000000|/home/rubins/workspace1/Mymodule/time/__openerp__.py
+time.__init__|1453354679000000000|/home/rubins/workspace1/Mymodule/time/__init__.py
+time.models.__init__|1453354679000000000|/home/rubins/workspace1/Mymodule/time/models/__init__.py
+time.controllers.controllers|1453354679000000000|/home/rubins/workspace1/Mymodule/time/controllers/controllers.py
+time.models.models|1457576472000000000|/home/rubins/workspace1/Mymodule/time/models/models.py
+-- END DISKCACHE
+-- START DICTIONARY
+9
+8=PackageSession.action_expired
+3=Status
+4=Tracker
+9=PackageSession.action_active
+7=PackageSession._total
+6=PackageSession
+1=time.models.models
+5=Priority
+2=Usage
+-- END DICTIONARY
+-- START TREE 1
+5
+pac|1|PackageSession!9@
+pri|1|Priority!9@
+sta|1|Status!9@
+tra|1|Tracker!9@
+usa|1|Usage!9@
+-- END TREE
+-- START TREE 2
+19
+_na|5|_name!2&11@_name!3&11@_name!4&11@_name!5&11@_name!6&11@
+_to|1|_total!6&10@
+act|2|action_active!6&10@action_expired!6&10@
+amt|2|amt_left!7&11@amt_left!6&11@
+cus|1|customer_id!6&11@
+des|1|description!2&11@
+dur|2|duration!2&11@duration!6&11@
+end|1|end_date!6&11@
+in_|1|in_date!2&11@
+ini|1|initial_hours!6&11@
+iss|1|issue_id!2&11@
+nam|3|name!3&11@name!4&11@name!5&11@
+pri|1|priority!2&11@
+sta|5|status!2&11@state!8&11@state!9&11@state!6&11@start_date!6&11@
+tim|1|time_id!2&11@
+tot|2|total!7&11@total!6&11@
+tra|1|tracker!2&11@
+usa|1|usage_ids!6&11@
+wri|1|write!6&10@
+-- END TREE

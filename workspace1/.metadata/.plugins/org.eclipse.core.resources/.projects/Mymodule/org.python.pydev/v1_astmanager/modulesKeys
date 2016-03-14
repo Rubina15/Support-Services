@@ -1,0 +1,7 @@
+MODULES_MANAGER_V2
+time.__init__|/home/rubins/workspace1/Mymodule/time/__init__.py
+time.__openerp__|/home/rubins/workspace1/Mymodule/time/__openerp__.py
+time.controllers.__init__|/home/rubins/workspace1/Mymodule/time/controllers/__init__.py
+time.controllers.controllers|/home/rubins/workspace1/Mymodule/time/controllers/controllers.py
+time.models.__init__|/home/rubins/workspace1/Mymodule/time/models/__init__.py
+time.models.models|/home/rubins/workspace1/Mymodule/time/models/models.py

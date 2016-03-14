@@ -1,0 +1,104 @@
+# -*- coding: utf-8 -*-
+from openerp import models, fields, api, _
+from mx.DateTime.DateTime import today
+from openerp.exceptions import UserError
+from mx.DateTime.mxDateTime.mxDateTime_Python import DateTime
+
+
+class PackageSession(models.Model):
+    _name = 'timetracking.session'
+
+    customer_id = fields.Many2one('res.partner',
+                                  string='Customer',
+                                  required=True)
+    initial_hours = fields.Float(required=True)
+    start_date = fields.Date(string="Start Date",required = True,default=fields.Date.today())
+    end_date = fields.Date(string="End Date")
+
+    total = fields.Float(string="Total Duration", compute='_total', store=True)
+    amt_left = fields.Float(string="Amount Left", compute='_total', store=True)
+
+    usage_ids = fields.One2many('timetracking.usage', 'time_id')
+
+    duration = fields.One2many('timetracking.usage', 'duration')
+
+    state = fields.Selection([
+        ('active', "Active"),
+        ('expired', "Expired"),
+    ], default='active')
+
+    @api.multi
+    def write(self, values):
+        res = super(PackageSession, self).write(values)
+        for rec in self:
+            if rec.amt_left == 0:
+                self._cr.execute('update timetracking_session '
+                           'set state=%s where id=%s',
+                           ('expired', rec.id))
+            elif rec.amt_left < 0:
+                raise UserError(_('The amount left have been exceeded '
+                                  'to %f Please check it again.') % rec.amt_left)
+            else:
+                self._cr.execute('update timetracking_session '
+                           'set state=%s where id=%s',
+                           ('active', rec.id))
+        return res
+
+    @api.multi
+    def action_active(self):
+        self.state = 'active'
+
+    @api.multi
+    def action_expired(self):
+        self.state = 'expired'
+
+    @api.one
+    @api.depends('duration', 'usage_ids', 'initial_hours')
+    def _total(self):
+        total = 0.0
+        available = self.initial_hours
+        for r in self.usage_ids:
+            total += r.duration
+        self.total = total
+        available -= total
+        self.amt_left = available
+   
+        
+
+class Priority(models.Model):
+    _name = 'timetracking.priority'
+
+    name = fields.Text(string='Priority', required=True)
+
+
+class Tracker(models.Model):
+    _name = 'timetracking.tracker'
+
+    name = fields.Text(string='Tracker', required=True)
+
+
+class Status(models.Model):
+    _name = 'timetracking.status'
+
+    name = fields.Text(string='Status', required=True)
+
+
+class Usage(models.Model):
+    _name = 'timetracking.usage'
+
+    time_id = fields.Many2one('timetracking.session',
+                              string="Time",
+                              required=True)
+    customer = fields.One2many('timetracking.session', compute='_copy')
+    issue_id = fields.Char(required=True)
+    description = fields.Text()
+    in_date = fields.Date(required=True, default=fields.Date.today())
+    duration = fields.Float(required=True)
+    priority = fields.Many2one('timetracking.priority', 'Priority')
+    tracker = fields.Many2one('timetracking.tracker', 'Tracker')
+    status = fields.Many2one('timetracking.status', 'Status')
+
+    @api.depends('customer_id', 'time_id')
+    def _copy(self):
+        for r in self.time_id:
+            self.customer = r.customer_id
